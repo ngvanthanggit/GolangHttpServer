@@ -1,10 +1,12 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/ngvanthanggit/GolangHttpServer.git/api"
+)
 
 func main() {
-	http.HandleFunc("/hello-world", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello world!"))
-	})
-	http.ListenAndServe(":8000", nil)
+	srv := api.NewServer()
+	http.ListenAndServe(":8000", srv)
 }

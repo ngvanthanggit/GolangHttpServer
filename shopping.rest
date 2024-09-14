@@ -1,0 +1,12 @@
+GET http://localhost:8000/shopping-items
+
+
+POST http://localhost:8000/shopping-items
+Content-Type: application/json
+
+{
+    "name": "Laksa"
+}
+
+
+DELETE http://localhost:8000/shopping-items/374c594f-790c-4a3e-9447-79b777add400
