@@ -5,7 +5,7 @@ POST http://localhost:8000/shopping-items
 Content-Type: application/json
 
 {
-    "name": "Laksa"
+    "name": "Spring roll"
 }
 
 

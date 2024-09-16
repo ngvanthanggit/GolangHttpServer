@@ -2,11 +2,22 @@ package api
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
+	"text/template"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
+
+var indexPage string = `
+<!DOCTYPE html>
+<html>
+  <body>
+	<h1>Page</h1>
+  </body>
+</html>
+`
 
 type Item struct {
 	ID   uuid.UUID `json:"id"`
@@ -54,9 +65,19 @@ func (s *Server) createShoppingItem() http.HandlerFunc {
 
 func (s *Server) listShoppingItems() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if err := json.NewEncoder(w).Encode(s.shoppingItems); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "text/html")
+
+		tmpl, err := template.ParseFiles("templates/shopping-items.html")
+
+		if err != nil {
+			http.Error(w, "Template is invalid", http.StatusInternalServerError)
+			log.Printf("Error parsing template: %v", err)
+			return
+		}
+
+		if err := tmpl.Execute(w, s.shoppingItems); err != nil {
+			http.Error(w, "Unable to render items", http.StatusInternalServerError)
+			log.Printf("Error executing template: %v", err)
 			return
 		}
 	}
